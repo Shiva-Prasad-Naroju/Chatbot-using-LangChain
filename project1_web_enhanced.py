@@ -1,26 +1,22 @@
-# This file is functionally same as main.py but includes a bit
-# enhanced and visually appealing web interface.
-
 import os
 import streamlit as st
 from langchain_groq import ChatGroq
 from langchain.schema import HumanMessage
-import time
-
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
-
 groq_api_key = os.getenv("GROQ_API_KEY")
 
-# Set Groq API key
+if groq_api_key is None:
+    st.error("❌ GROQ_API_KEY is missing. Please check your .env file.")
+    st.stop()
+
 os.environ["GROQ_API_KEY"] = groq_api_key
 
-# Initialize the LLM with Groq
 llm = ChatGroq(temperature=0.8, model_name="llama3-8b-8192")
 
-# Custom CSS for modern UI
+st.set_page_config(page_title="AI Chat Assistant", layout="wide")
+
 st.markdown("""
 <style>
     .main-header {
@@ -59,11 +55,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Header
 st.markdown("""
 <div class="main-header">
     <h1>🤖 AI Chat Assistant</h1>
@@ -71,7 +65,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Features section
 col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown("### ⚡ Lightning Fast")
@@ -83,54 +76,37 @@ with col3:
     st.markdown("### 💬 Natural Conversations")
     st.write("Human-like conversation experience")
 
-# Chat interface
 st.markdown("### 💬 Chat Interface")
 
-# Display chat history
 if st.session_state.messages:
-    chat_container = st.container()
-    with chat_container:
+    with st.container():
         for message in st.session_state.messages:
-            if message["role"] == "user":
-                st.markdown(f'<div class="user-message">👤 You: {message["content"]}</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div class="ai-message">🤖 AI: {message["content"]}</div>', unsafe_allow_html=True)
+            role_class = "user-message" if message["role"] == "user" else "ai-message"
+            icon = "👤 You:" if message["role"] == "user" else "🤖 AI:"
+            st.markdown(f'<div class="{role_class}">{icon} {message["content"]}</div>', unsafe_allow_html=True)
 
-# Input form
 with st.form(key="chat_form", clear_on_submit=True):
     user_input = st.text_area("Ask me anything...", height=100, placeholder="Type your message here...")
     submitted = st.form_submit_button("Send Message", use_container_width=True)
 
 if submitted and user_input:
-    # Add user message to history
     st.session_state.messages.append({"role": "user", "content": user_input})
-    
-    # Show loading spinner
     with st.spinner("AI is thinking..."):
         try:
-            # Generate response
             response = llm([HumanMessage(content=user_input)])
             ai_response = response.content
-            
-            # Add AI response to history
             st.session_state.messages.append({"role": "assistant", "content": ai_response})
-            
         except Exception as e:
             st.error(f"Error: {str(e)}")
-    
-    # Rerun to update the chat display
     st.rerun()
 
-# Sidebar with additional info
 with st.sidebar:
     st.markdown("### 🔧 Settings")
     st.write("**Model:** Llama 3 8B")
     st.write("**Temperature:** 0.8")
     st.write("**Provider:** Groq")
-    
     st.markdown("### 📊 Statistics")
     st.write(f"**Messages:** {len(st.session_state.messages)}")
-    
     if st.button("Clear Chat History"):
         st.session_state.messages = []
         st.rerun()

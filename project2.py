@@ -1,4 +1,3 @@
-# Integrate with GROQ API
 import os
 from langchain_groq import ChatGroq
 from langchain.schema import HumanMessage
@@ -6,20 +5,23 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
 from langchain.memory import ConversationBufferMemory
 import streamlit as st
-
-
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
+# Get the API key
 groq_api_key = os.getenv("GROQ_API_KEY")
 
+# Stop execution if key is missing
+if groq_api_key is None:
+    st.error("❌ GROQ_API_KEY is missing. Please check your .env file or Streamlit secrets.")
+    st.stop()
 
-# Set environment variable
+# Set Groq API key
 os.environ["GROQ_API_KEY"] = groq_api_key
 
-# Streamlit framework
+# Streamlit UI
 st.title("Celebrity search results")
 input_text = st.text_input("Search the topic")
 
@@ -39,7 +41,7 @@ third_input_prompt = PromptTemplate(
     template="Mention 5 major world events that happened in the year {dob}."
 )
 
-# GROQ AI LLM
+# GROQ LLM
 llm = ChatGroq(temperature=0.8, model_name="llama3-8b-8192")
 
 # Memory Buffers
@@ -48,31 +50,11 @@ dob_memory = ConversationBufferMemory(input_key='person', memory_key='chat_histo
 descr_memory = ConversationBufferMemory(input_key='dob', memory_key='description_history')
 
 # LLM Chains
-chain1 = LLMChain(
-    llm=llm,
-    prompt=first_input_prompt,
-    verbose=True,
-    output_key='person',
-    memory=person_memory
-)
+chain1 = LLMChain(llm=llm, prompt=first_input_prompt, verbose=True, output_key='person', memory=person_memory)
+chain2 = LLMChain(llm=llm, prompt=second_input_prompt, verbose=True, output_key='dob', memory=dob_memory)
+chain3 = LLMChain(llm=llm, prompt=third_input_prompt, verbose=True, output_key='description', memory=descr_memory)
 
-chain2 = LLMChain(
-    llm=llm,
-    prompt=second_input_prompt,
-    verbose=True,
-    output_key='dob',
-    memory=dob_memory
-)
-
-chain3 = LLMChain(
-    llm=llm,
-    prompt=third_input_prompt,
-    verbose=True,
-    output_key='description',
-    memory=descr_memory
-)
-
-# Parent Sequential Chain
+# Combine chains
 parent_chain = SequentialChain(
     chains=[chain1, chain2, chain3],
     input_variables=['name'],
@@ -80,7 +62,7 @@ parent_chain = SequentialChain(
     verbose=True
 )
 
-# Streamlit execution
+# Run the app
 if input_text:
     result = parent_chain({'name': input_text})
     st.write(result)
