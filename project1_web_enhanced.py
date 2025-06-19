@@ -3,10 +3,16 @@
 
 import os
 import streamlit as st
-from constants import groq_api_key
 from langchain_groq import ChatGroq
 from langchain.schema import HumanMessage
 import time
+
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+groq_api_key = os.getenv("GROQ_API_KEY")
 
 # Set Groq API key
 os.environ["GROQ_API_KEY"] = groq_api_key
