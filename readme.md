@@ -1,4 +1,4 @@
-# 🤖 AI Projects Using LangChain + Groq + Streamlit
+# 🤖 AI Project Chatbot Using LangChain + Groq + Streamlit
 
 Welcome to my AI projects built using **LangChain**, **Groq’s LLaMA3 models**, and **Streamlit**. These projects demonstrate the power of large language models through conversational interfaces and intelligent reasoning using chaining techniques.
 
