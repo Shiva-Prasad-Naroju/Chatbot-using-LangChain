@@ -24,7 +24,7 @@ This repository contains **two major projects**:
     
   - Output:
     
-  - ## 🧠 Chain Flow:
+  - ### Chain Flow:
  
     1. Description of the celebrity
     2. Their date of birth (DOB)
@@ -62,3 +62,9 @@ This is my **first LangChain project** using chaining, memory, and structured pr
 
 ├── .gitignore # Prevents pushing secrets and environments
 
+
+## Result UI:
+
+![Results](results/project1.png)
+
+![Results](results/project1_web_enhanced.png)
