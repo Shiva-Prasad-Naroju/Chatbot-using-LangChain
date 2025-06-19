@@ -93,7 +93,7 @@ if submitted and user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.spinner("AI is thinking..."):
         try:
-            response = llm([HumanMessage(content=user_input)])
+            response = llm.invoke([HumanMessage(content=user_input)])
             ai_response = response.content
             st.session_state.messages.append({"role": "assistant", "content": ai_response})
         except Exception as e:

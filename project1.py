@@ -29,5 +29,5 @@ llm = ChatGroq(temperature=0.8, model_name="llama3-8b-8192")
 
 # Generate and display response
 if input_text:
-    response = llm([HumanMessage(content=input_text)])
+    response = llm.invoke([HumanMessage(content=input_text)])
     st.write(response.content)
