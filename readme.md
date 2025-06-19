@@ -65,6 +65,6 @@ This is my **first LangChain project** using chaining, memory, and structured pr
 
 ## Result UI:
 
-![Results](results/project1.png)
+![results](results/project1.png)
 
-![Results](results/project1_web_enhanced.png)
+![results](results/project1_web_enhanced.png)
