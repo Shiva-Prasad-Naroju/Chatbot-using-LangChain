@@ -10,9 +10,11 @@ This repository contains **two major projects**:
 
 - `project1.py` – A basic LLM-powered chatbot using **Groq** and **Streamlit**.
 
-    project1.py webpage link: 
+    project1.py webpage link: https://chatbot-using-langchain-qujjac9mfny2ruzbjqjmhg.streamlit.app/
 
 - `project1_web_enhanced.py` – Functionally the same as `project1.py`, but with a **visually enhanced UI** using custom CSS (dark theme, carousels, and improved layout).
+
+    project1_web_enhanced.py webpage link: https://shiva-prasad-naroju-chatbot-using--project1-web-enhanced-nfbuce.streamlit.app/
 
 ### 🔹 Project 2: Chained Prompt AI System
 
@@ -22,6 +24,8 @@ This repository contains **two major projects**:
     1. Description of the celebrity
     2. Their date of birth (DOB)
     3. 5 major world events from their birth year
+
+    project2.py web link: https://shiva-prasad-naroju-chatbot-using-langchain-project2-wfsl74.streamlit.app/
 
 This is my **first LangChain project** using chaining, memory, and structured prompt engineering.
 
